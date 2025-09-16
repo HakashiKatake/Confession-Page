@@ -91,6 +91,36 @@ For detailed schema documentation, see [SCHEMA.md](./SCHEMA.md).
 2. Deploy: `firebase deploy`
 3. Access live site: `https://your-project.web.app`
 
+### Firebase config
+
+1. Get your config from firebase and put it in a `firebase.config.js`
+
+```
+// Firebase configuration - replace these values with your actual Firebase config
+const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
+  measurementId: ""
+};
+
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js';
+import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js';
+import { getDatabase, ref, push, onValue, remove, update, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js';
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const database = getDatabase(app);
+
+export { auth, database, signInAnonymously, onAuthStateChanged, ref, push, onValue, remove, update, serverTimestamp };
+
+```
+
 ### Local Testing:
 For quick testing without backend:
 1. Open `index.html` directly in browser
