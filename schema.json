@@ -1,0 +1,387 @@
+{
+  "database": "confessions_firebase",
+  "description": "Firebase Realtime Database Schema for Campus Anonymous Confession Board - Real-time NoSQL database with advanced moderation and engagement features",
+  "version": "2.0",
+  "database_type": "Firebase Realtime Database",
+  "collections": {
+    "posts": {
+      "description": "Store all anonymous confessions with real-time updates, categories, likes, and moderation",
+      "structure": "Firebase Realtime Database paths",
+      "security_rules": {
+        "read": "true (public read access)",
+        "write": "auth != null (authenticated anonymous users only)",
+        "validation": "title <= 100 chars, content <= 500 chars"
+      },
+      "sample_documents": [
+        {
+          "postId_1726502400000": {
+            "title": "Campus WiFi Issues in Library",
+            "content": "Anyone else having trouble with WiFi in the library today? It's been really slow all morning. Can't get any work done!",
+            "category": "academic",
+            "timestamp": 1726502400000,
+            "expiresAt": 1726588800000,
+            "anonymousUserId": "firebase_anon_user_xyz789",
+            "isActive": true,
+            "likes": 15,
+            "likedBy": {
+              "firebase_anon_user_abc123": true,
+              "firebase_anon_user_def456": true,
+              "firebase_anon_user_ghi789": true
+            },
+            "reports": {
+              "report_id_1": {
+                "reportedBy": "firebase_anon_user_jkl012",
+                "reason": "Spam",
+                "timestamp": 1726505000000,
+                "status": "pending"
+              }
+            }
+          }
+        },
+        {
+          "postId_1726502500000": {
+            "title": "Great Food at Cafeteria Today!",
+            "content": "The new chef is amazing! Try the pasta, it's incredible. Finally some good food on campus. Definitely worth the wait in line.",
+            "category": "food",
+            "timestamp": 1726502500000,
+            "expiresAt": 1726588900000,
+            "anonymousUserId": "firebase_anon_user_abc456",
+            "isActive": true,
+            "likes": 28,
+            "likedBy": {
+              "firebase_anon_user_xyz789": true,
+              "firebase_anon_user_def456": true,
+              "firebase_anon_user_mno345": true,
+              "firebase_anon_user_pqr678": true
+            },
+            "reports": {}
+          }
+        },
+        {
+          "postId_1726502600000": {
+            "title": "Study Group for CS101 Final",
+            "content": "Looking for people to form a study group for CS101 final exam. Meet at library every Tuesday 7pm? We can go over practice problems together.",
+            "category": "academic",
+            "timestamp": 1726502600000,
+            "expiresAt": 1726589000000,
+            "anonymousUserId": "firebase_anon_user_def789",
+            "isActive": true,
+            "likes": 42,
+            "likedBy": {
+              "firebase_anon_user_abc123": true,
+              "firebase_anon_user_xyz789": true,
+              "firebase_anon_user_stu901": true,
+              "firebase_anon_user_vwx234": true,
+              "firebase_anon_user_yza567": true
+            },
+            "reports": {}
+          }
+        }
+      ]
+    },
+    "reports": {
+      "description": "Store detailed reports for content moderation with admin workflow management",
+      "structure": "Firebase Realtime Database nested under post IDs",
+      "security_rules": {
+        "read": "auth != null (authenticated users only)",
+        "write": "auth != null (authenticated users only)",
+        "validation": "required fields: postId, reportedBy, reason, timestamp, status"
+      },
+      "sample_documents": [
+        {
+          "postId_1726502400000": {
+            "report_id_1726505000000": {
+              "postId": "postId_1726502400000",
+              "reportedBy": "firebase_anon_user_reporter1",
+              "reason": "Breaks the Content Policy",
+              "timestamp": 1726505000000,
+              "status": "pending",
+              "adminAction": null,
+              "reviewedBy": null,
+              "reviewedAt": null
+            },
+            "report_id_1726506000000": {
+              "postId": "postId_1726502400000",
+              "reportedBy": "firebase_anon_user_reporter2",
+              "reason": "Harassment",
+              "timestamp": 1726506000000,
+              "status": "resolved",
+              "adminAction": "dismissed",
+              "reviewedBy": "admin_user_1",
+              "reviewedAt": 1726520000000
+            }
+          }
+        }
+      ]
+    },
+    "userPreferences": {
+      "description": "Store anonymous user preferences and session data without personal information",
+      "structure": "Firebase Realtime Database keyed by anonymous user ID",
+      "security_rules": {
+        "read": "$userId === auth.uid (user can only read own preferences)",
+        "write": "$userId === auth.uid (user can only write own preferences)"
+      },
+      "sample_documents": [
+        {
+          "firebase_anon_user_xyz789": {
+            "theme": "dark",
+            "lastActive": 1726502400000,
+            "postCount": 3,
+            "sessionStart": 1726500000000,
+            "isBlocked": false,
+            "deviceFingerprint": "hash_device_info_123",
+            "preferredCategories": ["academic", "social", "events"]
+          }
+        },
+        {
+          "firebase_anon_user_abc456": {
+            "theme": "light",
+            "lastActive": 1726503000000,
+            "postCount": 1,
+            "sessionStart": 1726502000000,
+            "isBlocked": false,
+            "deviceFingerprint": "hash_device_info_456",
+            "preferredCategories": ["food", "campus-life"]
+          }
+        }
+      ]
+    },
+    "adminConfig": {
+      "description": "Store application configuration, category definitions, and moderation rules",
+      "structure": "Firebase Realtime Database with nested configuration objects",
+      "security_rules": {
+        "read": "true (public read access for app configuration)",
+        "write": "false (admin-only write access via server-side rules)"
+      },
+      "sample_documents": [
+        {
+          "postSettings": {
+            "postExpiryHours": 24,
+            "maxPostsPerUser": 10,
+            "maxPostLength": 500,
+            "maxTitleLength": 100,
+            "moderationEnabled": true,
+            "autoModeration": true,
+            "likesEnabled": true,
+            "reportsEnabled": true
+          },
+          "categories": {
+            "academic": {
+              "name": "Academic",
+              "icon": "fas fa-book",
+              "enabled": true,
+              "color": "#3b82f6",
+              "description": "Study groups, academic questions, course discussions"
+            },
+            "social": {
+              "name": "Social",
+              "icon": "fas fa-users",
+              "enabled": true,
+              "color": "#8b5cf6",
+              "description": "Social events, meetups, campus social life"
+            },
+            "events": {
+              "name": "Events",
+              "icon": "fas fa-calendar-alt",
+              "enabled": true,
+              "color": "#f59e0b",
+              "description": "Campus events, announcements, activities"
+            },
+            "campus-life": {
+              "name": "Campus Life",
+              "icon": "fas fa-university",
+              "enabled": true,
+              "color": "#10b981",
+              "description": "General campus life, facilities, experiences"
+            },
+            "food": {
+              "name": "Food & Dining",
+              "icon": "fas fa-utensils",
+              "enabled": true,
+              "color": "#ef4444",
+              "description": "Dining halls, restaurants, food recommendations"
+            },
+            "housing": {
+              "name": "Housing",
+              "icon": "fas fa-home",
+              "enabled": true,
+              "color": "#06b6d4",
+              "description": "Dormitories, housing, roommate discussions"
+            },
+            "technology": {
+              "name": "Technology",
+              "icon": "fas fa-laptop",
+              "enabled": true,
+              "color": "#6366f1",
+              "description": "Tech support, software, campus IT issues"
+            },
+            "sports": {
+              "name": "Sports",
+              "icon": "fas fa-futbol",
+              "enabled": true,
+              "color": "#059669",
+              "description": "Sports teams, fitness, recreational activities"
+            },
+            "clubs": {
+              "name": "Clubs & Organizations",
+              "icon": "fas fa-theater-masks",
+              "enabled": true,
+              "color": "#ec4899",
+              "description": "Student organizations, clubs, extracurriculars"
+            },
+            "general": {
+              "name": "General Discussion",
+              "icon": "fas fa-comment",
+              "enabled": true,
+              "color": "#6b7280",
+              "description": "General topics, miscellaneous discussions"
+            }
+          },
+          "bannedWords": [
+            "spam",
+            "inappropriate",
+            "offensive"
+          ],
+          "reportReasons": [
+            "Breaks the Content Policy",
+            "Harassment",
+            "Threatening violence",
+            "Spam",
+            "Sharing personal information",
+            "Impersonation",
+            "Prohibited transaction"
+          ],
+          "themeSettings": {
+            "defaultTheme": "dark",
+            "allowThemeToggle": true,
+            "customThemes": {
+              "dark": {
+                "primary": "#1a1a1a",
+                "secondary": "#2d2d2d",
+                "accent": "#3b82f6"
+              },
+              "light": {
+                "primary": "#ffffff",
+                "secondary": "#f8f9fa",
+                "accent": "#3b82f6"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "design_principles": {
+    "firebase_realtime_database": {
+      "rationale": "Real-time anonymous confession board benefits from instant updates and live synchronization",
+      "advantages": [
+        "Real-time updates for immediate post visibility",
+        "Offline support for mobile users",
+        "Simple denormalized structure for fast reads",
+        "Built-in authentication for anonymous users",
+        "Automatic scaling and high availability"
+      ]
+    },
+    "denormalization_strategy": {
+      "posts_collection": [
+        "Likes and likedBy embedded for atomic operations",
+        "Reports embedded in posts for fast moderation checks",
+        "Category info embedded for instant filtering",
+        "All engagement metrics in single document"
+      ],
+      "reports_collection": [
+        "Duplicate report data in both reports and posts collections",
+        "Enables both admin dashboard and post-level moderation",
+        "Trade-off: slight data duplication for performance gains"
+      ]
+    },
+    "real_time_features": {
+      "live_post_feed": "Firebase onValue listeners for instant post updates",
+      "live_like_counts": "Real-time like counter updates",
+      "admin_dashboard": "Live report monitoring and moderation",
+      "theme_sync": "Real-time theme preferences across sessions"
+    },
+    "security_implementation": {
+      "anonymous_authentication": "Firebase Anonymous Auth for user tracking without personal data",
+      "content_moderation": "Client-side and server-side banned word filtering",
+      "report_system": "Multi-tier reporting with admin workflow",
+      "rate_limiting": "Per-user post limits and session management"
+    }
+  },
+  "performance_optimizations": {
+    "data_structure": {
+      "flat_hierarchy": "Minimal nesting for faster Firebase queries",
+      "indexed_access": "Key-based lookups for O(1) post retrieval",
+      "batch_operations": "Atomic updates for like/unlike operations"
+    },
+    "client_side_caching": {
+      "post_filtering": "Client-side category and sort filtering",
+      "theme_persistence": "LocalStorage for theme preferences",
+      "session_management": "Persistent anonymous user sessions"
+    },
+    "data_expiration": {
+      "automatic_cleanup": "Client-side filtering of expired posts",
+      "storage_optimization": "24-hour post lifetime reduces database size",
+      "memory_management": "Real-time listeners with automatic cleanup"
+    }
+  },
+  "common_queries": {
+    "get_active_posts_realtime": {
+      "firebase_query": "onValue(ref(database, 'posts'), callback)",
+      "description": "Real-time listener for all active posts with client-side filtering",
+      "performance": "Single listener for entire posts collection with local filtering"
+    },
+    "filter_posts_by_category": {
+      "client_implementation": "posts.filter(post => post.category === 'academic')",
+      "description": "Client-side category filtering for instant response",
+      "performance": "No additional database queries required"
+    },
+    "toggle_like_atomic": {
+      "firebase_query": "update(ref(database, `posts/${postId}`), { likes: newCount, [`likedBy/${userId}`]: newState })",
+      "description": "Atomic like/unlike operation updating both count and user tracking",
+      "performance": "Single atomic write operation"
+    },
+    "submit_report": {
+      "firebase_query": "push(ref(database, `reports/${postId}`), reportData)",
+      "description": "Add report to both reports collection and post reports array",
+      "performance": "Dual write for admin dashboard and post moderation"
+    },
+    "admin_dashboard_realtime": {
+      "firebase_query": "onValue(ref(database, 'reports'), callback)",
+      "description": "Real-time monitoring of all reports for admin interface",
+      "performance": "Single listener with real-time updates"
+    },
+    "trending_algorithm": {
+      "client_implementation": "posts.sort((a, b) => calculateTrendingScore(a) - calculateTrendingScore(b))",
+      "description": "Client-side trending calculation based on recent likes and time",
+      "performance": "Real-time sorting without additional queries"
+    }
+  },
+  "new_features_implemented": {
+    "category_system": {
+      "description": "10 predefined categories with icons and colors",
+      "categories": ["academic", "social", "events", "campus-life", "food", "housing", "technology", "sports", "clubs", "general"],
+      "display": "Color-coded badges on each post with category filtering"
+    },
+    "engagement_system": {
+      "likes": "Real-time like/unlike with user tracking",
+      "trending": "Algorithm combining recency and popularity",
+      "best_posts": "Sorting by total likes received"
+    },
+    "reporting_moderation": {
+      "user_reports": "7 predefined report reasons with admin workflow",
+      "admin_dashboard": "Real-time moderation interface with post management",
+      "automated_flagging": "Posts with multiple reports flagged for review"
+    },
+    "ui_ux_enhancements": {
+      "dark_theme_default": "Dark theme as default with toggle option",
+      "responsive_design": "Mobile-first responsive layout",
+      "real_time_updates": "Live post feed with smooth animations"
+    },
+    "advanced_filtering": {
+      "sort_options": "Best, Trending, Newest with real-time updates",
+      "category_dropdown": "Multi-select category filtering",
+      "instant_search": "Client-side search and filtering"
+    }
+  }
+}

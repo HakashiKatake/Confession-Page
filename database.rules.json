@@ -1,0 +1,28 @@
+{
+  "rules": {
+    "posts": {
+      ".read": true,
+      ".write": "auth != null",
+      "$postId": {
+        ".validate": "newData.hasChildren(['title', 'content', 'timestamp', 'expiresAt', 'anonymousUserId'])",
+        "title": {
+          ".validate": "newData.isString() && newData.val().length <= 100"
+        },
+        "content": {
+          ".validate": "newData.isString() && newData.val().length <= 500"
+        },
+        "anonymousUserId": {
+          ".validate": "newData.val() == auth.uid"
+        }
+      }
+    },
+    "test": {
+      ".read": true,
+      ".write": true
+    },
+    "analytics": {
+      ".read": true,
+      ".write": false
+    }
+  }
+}

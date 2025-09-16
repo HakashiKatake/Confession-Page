@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Anonymous Board | Share Your Voice</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="description" content="Anonymous posting board for campus users. Share thoughts, experiences, and connect with your campus community.">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="top-nav">
+            <div class="nav-content">
+                <div class="logo">
+                    <i class="fas fa-building"></i>
+                    <span>ConfessYourSins</span>
+                </div>
+                <div class="nav-center">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search confessions">
+                    </div>
+                </div>
+                <div class="nav-status">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div id="authStatus" class="auth-status">
+                        <i class="fas fa-circle"></i>
+                        <span>Connecting...</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <section class="post-creation-section">
+                <div class="container">
+                    <div class="post-form-container">
+                        <div class="post-input-wrapper">
+                            <input type="text" placeholder="Post a Confession" class="post-input-field" id="postInputField" readonly>
+                            <button class="post-submit-btn" id="goToPostPage">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="filters-section">
+                <div class="container">
+                    <div class="filters-container">
+                        <div class="main-filters">
+                            <button class="filter-btn active" data-filter="best">
+                                <i class="fas fa-star"></i>
+                                Best
+                            </button>
+                            <button class="filter-btn" data-filter="trending">
+                                <i class="fas fa-fire"></i>
+                                Trending
+                            </button>
+                            <button class="filter-btn" data-filter="newest">
+                                <i class="fas fa-clock"></i>
+                                Newest
+                            </button>
+                        </div>
+                        <div class="category-dropdown">
+                            <button class="dropdown-btn" id="categoryDropdown">
+                                <span>All Categories</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu" id="categoryMenu">
+                                <label class="dropdown-item">
+                                    <input type="checkbox" value="all" checked>
+                                    <span>All Categories</span>
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" value="academic">
+                                    <span>Academic</span>
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" value="social">
+                                    <span>Social</span>
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" value="events">
+                                    <span>Events</span>
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" value="campus-life">
+                                    <span>Campus Life</span>
+                                </label>
+                                <label class="dropdown-item">
+                                    <input type="checkbox" value="general">
+                                    <span>General</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="posts-section">
+                <div class="container">
+                    <div id="postsContainer" class="posts-grid">
+                        <div class="loading-container">
+                            <div class="loading-spinner">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                            <p>Loading posts...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
