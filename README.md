@@ -2,6 +2,10 @@
 
 A NoSQL-powered anonymous posting board where campus users can share thoughts and posts auto-delete after 24 hours. Built with MongoDB, Firebase Auth, Realtime Database, and Hosting.
 
+#Project Link
+https://confessions-1049a.web.app/
+hosted on Firebase Hosting
+
 ## Features
 
 - **Anonymous Authentication**: Firebase Auth for session management
